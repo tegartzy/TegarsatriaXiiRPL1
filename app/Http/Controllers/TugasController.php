@@ -11,61 +11,33 @@ class TugasController extends Controller
 {
 
     public function read(Request $request)
-{
-    // Ambil parameter sorting dari request
-    $sort = $request->query('sort', 'created_at'); // Default: sorting by created_at
+    {
+        // Ambil parameter sorting dan search dari request
+        $sort = $request->query('sort', 'created_at'); // Default: sorting by created_at
+        $search = $request->query('search'); // Ambil parameter search
 
-    // Query untuk mengambil tugas berdasarkan user_id dan sorting
-    $tugas = Tugas::where('user_id', Auth::id())
-        ->with('subTugas') // Eager load subTugas
-        ->when($sort, function ($query, $sort) {
-            switch ($sort) {
-                case 'created_at':
-                    return $query->orderBy('created_at', 'desc'); // Terbaru pertama
-                case 'deadline':
-                    return $query->orderBy('deadline', 'asc'); // Deadline terdekat pertama
-                case 'prioritas':
-                    return $query->orderBy('prioritas', 'asc'); // Prioritas tertinggi (angka terkecil) pertama
-                default:
-                    return $query->orderBy('created_at', 'desc'); // Default sorting
-            }
-        })
-        ->get(); // Ambil data
+        // Query untuk mengambil tugas berdasarkan user_id, search, dan sorting
+        $tugas = Tugas::where('user_id', Auth::id())
+            ->when($search, function ($query, $search) {
+                return $query->where('tugas', 'like', '%' . $search . '%'); // Filter berdasarkan nama tugas
+            })
+            ->with('subTugas') // Eager load subTugas
+            ->when($sort, function ($query, $sort) {
+                switch ($sort) {
+                    case 'created_at':
+                        return $query->orderBy('created_at', 'desc'); 
+                    case 'deadline':
+                        return $query->orderBy('deadline', 'asc'); 
+                    case 'prioritas':
+                        return $query->orderBy('prioritas', 'asc');
+                    default:
+                        return $query->orderBy('created_at', 'desc'); 
+                }
+            })
+            ->get(); 
 
-    return view('tugas.read', compact('tugas', 'sort'));
-}
-    // public function read()
-    // {
-    //     $tugas = Tugas::where('user_id', Auth::id())->with('subTugas')->get();
-    //     return view('tugas.read', compact('tugas'));
-
-    //     // Ambil parameter sorting dari request
-    //     $sort = $request->query('sort', 'created_at'); // Default: sorting by created_at
-
-    //     $sort = $request->query('sort', 'created_at'); // Default: sorting by created_at
-
-    //     // Query untuk sorting
-    //     $tugas = Tugas::query();
-
-    //     switch ($sort) {
-    //         case 'created_at':
-    //             $tugas->orderBy('created_at', 'desc'); // Terbaru pertama
-    //             break;
-    //         case 'deadline':
-    //             $tugas->orderBy('deadline', 'asc'); // Deadline terdekat pertama
-    //             break;
-    //         case 'prioritas':
-    //             $tugas->orderBy('prioritas', 'asc'); // Prioritas tertinggi (angka terkecil) pertama
-    //             break;
-    //         default:
-    //             $tugas->orderBy('created_at', 'desc'); // Default sorting
-    //             break;
-    //     }
-
-    //     $tugas = $tugas->get();
-
-    //     return view('tugas.read', compact('tugas', 'sort'));
-    // }
+        return view('tugas.read', compact('tugas', 'sort', 'search'));
+    }
 
     public function create()
     {

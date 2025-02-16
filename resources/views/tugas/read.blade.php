@@ -1,32 +1,31 @@
 @include('layouts.navbar')
+
 <style>
+    body {
+        background-color: #f4f4f4;
+    }
+
     .card-container {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
         align-items: center;
-        bac
     }
 
-    .card {
+    .card,
+    .cardHead {
+        background-color: #fff;
         width: 300px;
         border-radius: 10px;
         box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
         padding: 15px;
         display: flex;
         flex-direction: column;
-        margin: 0 auto;
-        margin-top: 2%;
+        margin: 2% auto;
     }
 
     .cardHead {
         width: 90%;
-        border-radius: 10px;
-        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-        padding: 15px;
-        display: flex;
-        flex-direction: column;
-        margin: 0 auto;
         justify-content: center;
         align-items: center;
     }
@@ -53,61 +52,109 @@
         align-items: center;
         width: 900px;
         height: 80px;
-        border: 2px dashed rgb(0, 0, 0);
+        border: 2px dashed black;
         border-radius: 10px;
         margin: 0 auto;
     }
 
     .plus-button svg {
         width: 40px;
-        color: black;
         height: 40px;
+        color: black;
     }
+
+    body {
+        background-color: #f4f4f4;
+    }
+
+    .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .card,
+    .cardHead {
+        background-color: #fff;
+        width: 300px;
+        border-radius: 10px;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        margin: 2% auto;
+    }
+
+    .cardHead {
+        width: 90%;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .sub-tugas {
+        list-style: none;
+        padding: 0;
+        margin-bottom: 10px;
+    }
+
+    .sub-tugas li {
+        margin-bottom: 5px;
+    }
+
+    .form-tambah-subtugas {
+        display: flex;
+        gap: 5px;
+        margin-top: 10px;
+    }
+
+    .plus-button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 900px;
+        height: 80px;
+        border: 2px dashed black;
+        border-radius: 10px;
+        margin: 0 auto;
+    }
+
+    .plus-button svg {
+        width: 40px;
+        height: 40px;
+        color: black;
+    }
+
+    footer {
+        background-color: #333;
+        color: white;
+        text-align: center;
+        width: 100%;
+        position: absolute;
+        margin-top: 30px;
+    }
+
 
     @media (max-width: 768px) {
         .card-container {
             flex-direction: column;
         }
 
-        .card {
-            width: 100%;
-        }
-
+        .card,
         .plus-button {
             width: 100%;
         }
     }
 
     @media (max-width: 480px) {
-        .card {
-            padding: 10px;
-        }
 
+        .card,
         .cardHead {
             padding: 10px;
         }
 
-        .sub-tugas {
-            padding: 0;
-        }
-
         .form-tambah-subtugas {
             flex-direction: column;
-        }
-
-        .prioritas-1 {
-            color: red;
-            font-weight: bold;
-        }
-
-        .prioritas-2 {
-            color: orange;
-            font-weight: bold;
-        }
-
-        .prioritas-3 {
-            color: green;
-            font-weight: bold;
         }
     }
 </style>
@@ -143,7 +190,7 @@
     <div class="cardHead">
         <div class="card-body">
             <!-- Tombol Tambah Tugas -->
-            <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex justify-content-between align-items-center mb-4">
                 <button class="plus-button" onclick="window.location='{{ route('tugas.create') }}'">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
                         <path
@@ -151,15 +198,30 @@
                     </svg>
                 </button>
             </div>
-            <!-- dropdown sort By -->
-            <form action="{{ route('tugas.read') }}" method="GET" class="mb-4">
-              <label for="sort" class="form-label">Urutkan Berdasarkan:</label>
-              <select name="sort" id="sort" class="form-select" onchange="this.form.submit()">
-                  <option value="created_at" {{ request('sort') == 'created_at' ? 'selected' : '' }}>Waktu Ditambahkan</option>
-                  <option value="deadline" {{ request('sort') == 'deadline' ? 'selected' : '' }}>Deadline</option>
-                  <option value="prioritas" {{ request('sort') == 'prioritas' ? 'selected' : '' }}>Prioritas</option>
-              </select>
-          </form>
+
+            <!-- Form Search dan Sorting -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <!-- Form Search -->
+                <form action="{{ route('tugas.read') }}" method="GET" class="d-flex gap-2">
+                    <input type="text" name="search" class="form-control" placeholder="Cari tugas..."
+                        value="{{ request('search') }}">
+                    <button type="submit" class="btn btn-primary">Cari</button>
+                    @if (request('search'))
+                        <a href="{{ route('tugas.read') }}" class="btn btn-secondary">Reset</a>
+                    @endif
+                </form>
+
+                <!-- Form Sorting -->
+                <form action="{{ route('tugas.read') }}" method="GET" class="d-flex gap-2">
+                    <select name="sort" id="sort" class="form-select" onchange="this.form.submit()">
+                        <option value="created_at" {{ request('sort') == 'created_at' ? 'selected' : '' }}>Waktu
+                            Ditambahkan</option>
+                        <option value="deadline" {{ request('sort') == 'deadline' ? 'selected' : '' }}>Deadline</option>
+                        <option value="prioritas" {{ request('sort') == 'prioritas' ? 'selected' : '' }}>Prioritas
+                        </option>
+                    </select>
+                </form>
+            </div>
 
             <!-- Daftar Tugas -->
             <div class="row mt-4">
@@ -175,11 +237,9 @@
                             </h3>
                             <p>Deadline: {{ $item->deadline }}</p>
                             <p>Status: <strong>{{ $item->status }}</strong></p>
-                            <p>Prioritas:
-                                <strong class="prioritas-{{ $item->prioritas }}">
-                                    {{ $item->prioritas_text }}
-                                </strong>
-                            </p>
+                            <p>Prioritas: <strong
+                                    class="prioritas-{{ $item->prioritas }}">{{ $item->prioritas_text }}</strong></p>
+
                             <!-- Form untuk mengubah status tugas -->
                             <form id="toggle-tugas-{{ $item->id }}"
                                 action="{{ route('tugas.toggleStatus', $item->id) }}" method="POST" class="d-none">
@@ -236,18 +296,26 @@
                                     class="delete-form d-inline mt-2">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger"><i class="bi bi-trash3"></i></button>
+                                    <button type="submit" class="btn btn-danger"><i
+                                            class="bi bi-trash3"></i></button>
                                 </form>
                             </div>
                         </div>
                     @endforeach
                 @else
-                    <p class="text-center">Tidak ada tugas yang tersedia.</p>
+                    <p class="text-center">Tidak ada tugas yang ditemukan.</p>
                 @endif
             </div>
         </div>
     </div>
 </div>
+
+<footer class="text-center bg-gray-800 text-white">
+    <p>Alamat email: <a href="tegarsatria106@gmail.com">tegarsatria106@gmail.com</a>    Nomor telepon: <a href="tel:+6289516088293">+6289516088293</a></p>
+    <p>&copy; 2025 Tegar satria. All rights reserved.</p>
+    {{-- <p><a href="#">Link ke halaman lain</a></p> --}}
+</footer>
+
 
 <!-- Script untuk Modal dan Konfirmasi -->
 <script>
