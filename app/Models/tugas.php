@@ -11,6 +11,21 @@ class Tugas extends Model
 
     protected $fillable = ['user_id', 'tugas', 'deadline', 'prioritas', 'status'];
 
+    // Definisikan accessor untuk prioritas_text
+    public function getPrioritasTextAttribute()
+    {
+        switch ($this->prioritas) {
+            case 1:
+                return 'High';
+            case 2:
+                return 'Medium';
+            case 3:
+                return 'Low';
+            default:
+                return 'Unknown';
+        }
+    }
+
     public function subTugas()
     {
         return $this->hasMany(SubTugas::class);

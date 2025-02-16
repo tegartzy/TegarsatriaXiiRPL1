@@ -19,7 +19,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/tugas', [TugasController::class, 'submit'])->name('tugas.submit');
 
     // Route update, delete, dan toggle status tugas
-    Route::patch('/tugas/{id}', [TugasController::class, 'update'])->name('tugas.update');
+    Route::put('/tugas/{id}', [TugasController::class, 'update'])->name('tugas.update');
     Route::delete('/tugas/{id}', [TugasController::class, 'delete'])->name('tugas.delete');
     Route::patch('/tugas/{id}/toggle-status', [TugasController::class, 'toggleStatus'])->name('tugas.toggleStatus');
 
