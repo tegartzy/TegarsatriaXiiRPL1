@@ -24,7 +24,7 @@
     </head>
     <body class="">
                         @if (Route::has('login'))
-                            <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4 py-3">
+                            <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4 py-3 d-flex">
                                 <div class="-mx-3 flex flex-1 justify-end">
                                 @auth
                                     <a
