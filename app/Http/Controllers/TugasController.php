@@ -10,34 +10,38 @@ use Illuminate\Support\Facades\Auth;
 class TugasController extends Controller
 {
 
+
+
     public function read(Request $request)
     {
-        // Ambil parameter sorting dan search dari request
-        $sort = $request->query('sort', 'created_at'); // Default: sorting by created_at
-        $search = $request->query('search'); // Ambil parameter search
+        $search = $request->query('search');
 
-        // Query untuk mengambil tugas berdasarkan user_id, search, dan sorting
+        // Gabungan sort dan order
+        $sortOrder = $request->query('sort_order', 'created_at-desc');
+        [$sort, $order] = explode('-', $sortOrder);
+
         $tugas = Tugas::where('user_id', Auth::id())
             ->when($search, function ($query, $search) {
-                return $query->where('tugas', 'like', '%' . $search . '%'); // Filter berdasarkan nama tugas
+                return $query->where('tugas', 'like', '%' . $search . '%');
             })
-            ->with('subTugas') // Eager load subTugas
-            ->when($sort, function ($query, $sort) {
-                switch ($sort) {
-                    case 'created_at':
-                        return $query->orderBy('created_at', 'desc'); 
-                    case 'deadline':
-                        return $query->orderBy('deadline', 'asc'); 
-                    case 'prioritas':
-                        return $query->orderBy('prioritas', 'asc');
-                    default:
-                        return $query->orderBy('created_at', 'desc'); 
-                }
+            ->with('subTugas')
+            ->orderByRaw("CASE WHEN status = 'Selesai' THEN 1 ELSE 0 END")
+            ->when(in_array($sort, ['created_at', 'deadline', 'prioritas']) && in_array($order, ['asc', 'desc']), function ($query) use ($sort, $order) {
+                return $query->orderBy($sort, $order);
+            }, function ($query) {
+                return $query->orderBy('created_at', 'desc');
             })
-            ->get(); 
+            ->paginate(6)
+            ->appends(['sort_order' => $sortOrder, 'search' => $search]);
 
-        return view('tugas.read', compact('tugas', 'sort', 'search'));
+
+
+
+        return view('tugas.read', compact('tugas', 'sort', 'order', 'search'));
     }
+
+
+
 
     public function create()
     {
@@ -156,6 +160,8 @@ class TugasController extends Controller
 
         return redirect()->route('tugas.read')->with('success', 'Sub-tugas berhasil ditambahkan!');
     }
+
+
 
 
 }

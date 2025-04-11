@@ -31,7 +31,7 @@
         align-items: center;
     }
 
-    .card{
+    .card {
         background-color: #e5e5ff;
     }
 
@@ -62,6 +62,7 @@
         background-color: #f5f0ff;
         color: purple;
         transition: background-color 0.3s ease, color 0.3s ease;
+        margin: 0 auto;
     }
 
     .plus-button svg {
@@ -79,16 +80,23 @@
         color: white;
     }
 
-    .warna-ungu{
+    .warna-ungu {
         background-color: #e5e5ff;
         border: 2px solid #e5e5ff;
-        color:black; 
-    }    
+        color: black;
+    }
 
     .warna-ungu:hover {
         background-color: #9f9fe0;
-        border:2px solid #9f9fe0;
-        color:white;
+        border: 2px solid #9f9fe0;
+        color: white;
+    }
+
+    .custom-pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
     }
 
     footer {
@@ -166,33 +174,58 @@
 
 
             <!-- Form Search dan Sorting -->
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <!-- Form Search -->
-                <form action="{{ route('tugas.read') }}" method="GET" class="d-flex gap-2">
+            <form action="{{ route('tugas.read') }}" method="GET" id="filterForm"
+                class="d-flex justify-content-between align-items-center mb-4">
+
+                <!-- Search Input (Kiri) -->
+                <div class="d-flex gap-2 align-items-center">
                     <input type="text" name="search" class="form-control" placeholder="Cari tugas..."
                         value="{{ request('search') }}">
-                    <button type="submit" class="btn btn-primary warna-ungu"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-                      </svg>
+                    <button type="submit" class="btn btn-primary warna-ungu">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-search" viewBox="0 0 16 16">
+                            <path
+                                d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                        </svg>
                     </button>
                     @if (request('search'))
-                        <a href="{{ route('tugas.read') }}" class="btn btn-secondary warna-ungu"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-                            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
-                          </svg></a>
+                        <a href="{{ route('tugas.read') }}" class="btn btn-secondary warna-ungu">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-x-lg" viewBox="0 0 16 16">
+                                <path
+                                    d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+                            </svg>
+                        </a>
                     @endif
-                </form>
+                </div>
 
-                <!-- Form Sorting -->
-                <form action="{{ route('tugas.read') }}" method="GET" class="d-flex gap-2">
-                    <select name="sort" id="sort" class="form-select" onchange="this.form.submit()">
-                        <option value="created_at" {{ request('sort') == 'created_at' ? 'selected' : '' }}>Waktu
-                            Ditambahkan</option>
-                        <option value="deadline" {{ request('sort') == 'deadline' ? 'selected' : '' }}>Deadline</option>
-                        <option value="prioritas" {{ request('sort') == 'prioritas' ? 'selected' : '' }}>Prioritas
+                <!-- Dropdown Sort (Kanan) -->
+                <div>
+                    <select name="sort_order" class="form-select"
+                        onchange="document.getElementById('filterForm').submit()">
+                        <option value="created_at-desc"
+                            {{ $sort == 'created_at' && $order == 'desc' ? 'selected' : '' }}>
+                            Waktu Ditambahkan (Terbaru)
+                        </option>
+                        <option value="created_at-asc" {{ $sort == 'created_at' && $order == 'asc' ? 'selected' : '' }}>
+                            Waktu Ditambahkan (Terlama)
+                        </option>
+                        <option value="deadline-asc" {{ $sort == 'deadline' && $order == 'asc' ? 'selected' : '' }}>
+                            Deadline (Terdekat)
+                        </option>
+                        <option value="deadline-desc" {{ $sort == 'deadline' && $order == 'desc' ? 'selected' : '' }}>
+                            Deadline (Terlambat)
+                        </option>
+                        <option value="prioritas-asc" {{ $sort == 'prioritas' && $order == 'asc' ? 'selected' : '' }}>
+                            Prioritas (Rendah ke Tinggi)
+                        </option>
+                        <option value="prioritas-desc" {{ $sort == 'prioritas' && $order == 'desc' ? 'selected' : '' }}>
+                            Prioritas (Tinggi ke Rendah)
                         </option>
                     </select>
-                </form>
-            </div>
+                </div>
+            </form>
+
 
             <!-- Daftar Tugas -->
             <div class="row mt-4">
@@ -273,19 +306,32 @@
                             </div>
                         </div>
                     @endforeach
-                @else
-                    <p class="text-center">Tidak ada tugas yang ditemukan.</p>
-                @endif
+
+                    <div class="flex mt-4 custom-pagination">
+                        @for ($i = 1; $i <= $tugas->lastPage(); $i++)
+                            <a href="{{ $tugas->url($i) }}"
+                                class="px-3 py-1 border rounded 
+                {{ $i == $tugas->currentPage() ? 'bg-blue-500 text-white' : 'bg-white text-gray-800' }}">
+                                {{ $i }}
+                            </a>
+                        @endfor
+                    </div>
+
             </div>
+        @else
+            <p class="text-center">Tidak ada tugas yang ditemukan.</p>
+            @endif
         </div>
     </div>
 </div>
 
-<footer class="text-center bg-gray-800 text-white">
-    <p>Alamat email: <a href="tegarsatria106@gmail.com">tegarsatria106@gmail.com</a> Nomor telepon: <a
-            href="tel:+6289516088293">+6289516088293</a></p>
-    <p>&copy; 2025 Tegar satria. All rights reserved.</p>
 
+<footer class="text-center bg-gray-800 text-white py-3 mt-5">
+    <p>
+        Alamat email: <a href="tegarsatria106@gmail.com">tegarsatria106@gmail.com</a> Nomor telepon: <a
+            href="tel:+6289516088293">+6289516088293</a>
+    </p>
+    <p>&copy; 2025 Tegar satria. All rights reserved.</p>
 </footer>
 
 
