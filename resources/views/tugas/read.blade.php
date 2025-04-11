@@ -2,7 +2,7 @@
 
 <style>
     body {
-        background-color: #f4f4f4;
+        background-color: #e5e5ff;
     }
 
     .card-container {
@@ -14,7 +14,7 @@
 
     .card,
     .cardHead {
-        background-color: #fff;
+
         width: 300px;
         border-radius: 10px;
         box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
@@ -25,9 +25,14 @@
     }
 
     .cardHead {
+        background-color: #56568f;
         width: 90%;
         justify-content: center;
         align-items: center;
+    }
+
+    .card{
+        background-color: #e5e5ff;
     }
 
     .sub-tugas {
@@ -52,88 +57,47 @@
         align-items: center;
         width: 900px;
         height: 80px;
-        border: 2px dashed black;
+        border: 2px solid #9f9fe0;
         border-radius: 10px;
-        margin: 0 auto;
+        background-color: #f5f0ff;
+        color: purple;
+        transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     .plus-button svg {
         width: 40px;
         height: 40px;
-        color: black;
+        color: #9f9fe0;
     }
 
-    body {
-        background-color: #f4f4f4;
+    .plus-button:hover {
+        background-color: #9f9fe0;
+        color: white;
     }
 
-    .card-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        align-items: center;
+    .plus-button:hover svg {
+        color: white;
     }
 
-    .card,
-    .cardHead {
-        background-color: #fff;
-        width: 300px;
-        border-radius: 10px;
-        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-        padding: 15px;
-        display: flex;
-        flex-direction: column;
-        margin: 2% auto;
-    }
+    .warna-ungu{
+        background-color: #e5e5ff;
+        border: 2px solid #e5e5ff;
+        color:black; 
+    }    
 
-    .cardHead {
-        width: 90%;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .sub-tugas {
-        list-style: none;
-        padding: 0;
-        margin-bottom: 10px;
-    }
-
-    .sub-tugas li {
-        margin-bottom: 5px;
-    }
-
-    .form-tambah-subtugas {
-        display: flex;
-        gap: 5px;
-        margin-top: 10px;
-    }
-
-    .plus-button {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 900px;
-        height: 80px;
-        border: 2px dashed black;
-        border-radius: 10px;
-        margin: 0 auto;
-    }
-
-    .plus-button svg {
-        width: 40px;
-        height: 40px;
-        color: black;
+    .warna-ungu:hover {
+        background-color: #9f9fe0;
+        border:2px solid #9f9fe0;
+        color:white;
     }
 
     footer {
         background-color: #333;
         color: white;
-        text-align: center;
         width: 100%;
         position: absolute;
         margin-top: 30px;
     }
-
 
     @media (max-width: 768px) {
         .card-container {
@@ -158,6 +122,7 @@
         }
     }
 </style>
+
 
 <div class="container mt-3">
     <!-- Modal untuk Edit Tugas -->
@@ -199,15 +164,21 @@
                 </button>
             </div>
 
+
             <!-- Form Search dan Sorting -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <!-- Form Search -->
                 <form action="{{ route('tugas.read') }}" method="GET" class="d-flex gap-2">
                     <input type="text" name="search" class="form-control" placeholder="Cari tugas..."
                         value="{{ request('search') }}">
-                    <button type="submit" class="btn btn-primary">Cari</button>
+                    <button type="submit" class="btn btn-primary warna-ungu"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                      </svg>
+                    </button>
                     @if (request('search'))
-                        <a href="{{ route('tugas.read') }}" class="btn btn-secondary">Reset</a>
+                        <a href="{{ route('tugas.read') }}" class="btn btn-secondary warna-ungu"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+                          </svg></a>
                     @endif
                 </form>
 
@@ -311,9 +282,10 @@
 </div>
 
 <footer class="text-center bg-gray-800 text-white">
-    <p>Alamat email: <a href="tegarsatria106@gmail.com">tegarsatria106@gmail.com</a>    Nomor telepon: <a href="tel:+6289516088293">+6289516088293</a></p>
+    <p>Alamat email: <a href="tegarsatria106@gmail.com">tegarsatria106@gmail.com</a> Nomor telepon: <a
+            href="tel:+6289516088293">+6289516088293</a></p>
     <p>&copy; 2025 Tegar satria. All rights reserved.</p>
-    {{-- <p><a href="#">Link ke halaman lain</a></p> --}}
+
 </footer>
 
 

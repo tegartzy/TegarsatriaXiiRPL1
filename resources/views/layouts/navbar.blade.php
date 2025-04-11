@@ -16,16 +16,33 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+    <style>
+        .logo{
+            width: 100px;
+            height: auto;
+        }
+
+        .navbar{
+            background: #56568f;
+        }
+
+        /* .warna-profile{
+            background-color:black; 
+        } */
+    </style>
+    <nav class="navbar navbar-expand-lg ">
         <div class="container">
-            <a class="navbar-brand">T(egar)odolist</a>
+            
+            <img class="logo" src="{{ asset('storage/logo/logoFull.png')}}" alt="logo" >
+             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle warna-profile" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             {{ Auth::user()->name }}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">

@@ -109,11 +109,11 @@
 
                 <!-- Forgot Password -->
                 <div class="flex items-center justify-between mt-4">
-                    @if (Route::has('password.request'))
-                        <a href="{{ route('password.request') }}">
-                            {{ __('Forgot your password?') }}
+                   
+                        <a href="{{ route('register') }}">
+                            {{ __('Belum punya akun?') }}
                         </a>
-                    @endif
+                    
 
                     <!-- Button Login -->
                     <x-primary-button class=" w-full">
